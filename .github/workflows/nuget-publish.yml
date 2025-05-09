@@ -1,0 +1,51 @@
+name: Build and Publish to NuGet.org
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    env:
+      CONFIGURATION: Release
+      DOTNET_NOLOGO: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'  # Or '8.0.x' if you target net8.0
+
+      - name: Restore dependencies
+        run: dotnet restore ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj
+
+      - name: Build project
+        run: dotnet build ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj --configuration $CONFIGURATION --no-restore
+
+      - name: Set version number
+        run: echo "VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: Pack NuGet package
+        run: |
+          dotnet pack ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj \
+            --configuration $CONFIGURATION \
+            --output ./nupkgs \
+            --include-symbols --include-source \
+            /p:PackageVersion=$VERSION
+
+      - name: Push to NuGet.org
+        run: |
+          dotnet nuget push ./nupkgs/*.nupkg \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key "${{ secrets.NUGET_API_KEY }}" \
+            --skip-duplicate
