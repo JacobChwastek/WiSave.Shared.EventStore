@@ -1,6 +1,7 @@
 ﻿<Solution>
   <Folder Name="/Solution Items/">
     <File Path=".github\workflows\nuget-publish.yml" />
+    <File Path="NuGet.Config" />
   </Folder>
   <Project Path="WiSave.Shared.EventStore\WiSave.Shared.EventStore.csproj" Type="Classic C#" />
 </Solution>
