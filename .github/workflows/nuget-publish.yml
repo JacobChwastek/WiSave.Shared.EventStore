@@ -28,7 +28,7 @@ jobs:
 
       - name: Inject GitHub token into nuget.config
         run: |
-          sed -i "s|%GITHUB_TOKEN%|${{ secrets.GITHUB_TOKEN }}|" NuGet.Config
+          sed -i "s|%GITHUB_TOKEN%|${{ secrets.NUGET_API_KEY }}|" NuGet.Config
           
       - name: Restore dependencies
         run: dotnet restore ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj
