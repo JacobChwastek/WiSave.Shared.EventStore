@@ -48,7 +48,8 @@ jobs:
 
       - name: Push to NuGet.org
         run: |
-          dotnet nuget push ./nupkgs/*.nupkg \
-            --source "https://nuget.pkg.github.com/JacobChwastek/index.json" \
-            --api-key ${{ secrets.GH_PAT }} \
-            --skip-duplicate
+         dotnet nuget push ./nupkg/${proj_name}.*.nupkg \
+          --source "https://nuget.pkg.github.com/JacobChwastek/index.json" \
+          --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+            
+  
