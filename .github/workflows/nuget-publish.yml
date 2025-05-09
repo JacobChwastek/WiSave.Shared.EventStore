@@ -24,8 +24,12 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'  # Or '8.0.x' if you target net8.0
+          dotnet-version: '9.0.x'
 
+      - name: Inject GitHub token into nuget.config
+        run: |
+          sed -i "s|%GITHUB_TOKEN%|${{ secrets.GITHUB_TOKEN }}|" nuget.config
+          
       - name: Restore dependencies
         run: dotnet restore ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj
 
