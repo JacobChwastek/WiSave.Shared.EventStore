@@ -25,9 +25,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-
-      - name: Inject GitHub token into nuget.config
-        run: sed -i "s|%GITHUB_PACKAGES_PAT%|${{ secrets.GITHUB_PACKAGES_PAT }}|" NuGet.Config
           
       - name: Restore dependencies
         run: dotnet restore ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj
