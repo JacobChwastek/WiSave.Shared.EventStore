@@ -5,7 +5,7 @@ namespace WiSave.Shared.EventStore.Aggregate;
 
 public abstract class Aggregate<TKey> : IAggregate where TKey : AggregateRootId
 {
-    public TKey Id { get; set; } = default!;
+    public TKey Id { get; set; } = null!;
 
     [Identity]
     public Guid AggregateId
