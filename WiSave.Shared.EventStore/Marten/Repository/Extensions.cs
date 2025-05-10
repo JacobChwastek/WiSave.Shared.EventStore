@@ -9,23 +9,23 @@ namespace WiSave.Shared.EventStore.Marten.Repository;
 
 public static class Extensions
 {
-    public static IServiceCollection AddMartenRepository<T>(this IServiceCollection services)
-        where T : class, IAggregate
+    public static IServiceCollection AddMartenRepository<T>(this IServiceCollection services) where T : class, IAggregate
     {
-        services.AddScoped<IMartenRepository<T>, MartenRepositoryWithTracingDecorator<T>>();
-        services.Decorate<IMartenRepository<T>>((inner, sp) => new MartenRepositoryWithTracingDecorator<T>(
-                inner,
-                sp.GetRequiredService<IDocumentSession>(),
-                sp.GetRequiredService<IActivityScope>(),
-                sp.GetRequiredService<ILogger<MartenRepositoryWithTracingDecorator<T>>>()
-            )
-        );
+        services.AddScoped<MartenRepository<T>>();
+        services.AddScoped<IMartenRepository<T>>(sp =>
+        {
+            var inner = sp.GetRequiredService<MartenRepository<T>>();
+            var session = sp.GetRequiredService<IDocumentSession>();
+            var scope = sp.GetRequiredService<IActivityScope>();
+            var logger = sp.GetRequiredService<ILogger<MartenRepositoryWithTracingDecorator<T>>>();
+
+            return new MartenRepositoryWithTracingDecorator<T>(inner, session, scope, logger);
+        });
 
         return services;
     }
 
-    public static async Task<T> Get<T>(this IMartenRepository<T> repository, Guid id,
-        CancellationToken cancellationToken = default) where T : class
+    public static async Task<T> Get<T>(this IMartenRepository<T> repository, Guid id, CancellationToken cancellationToken = default) where T : class
     {
         var entity = await repository.Find(id, cancellationToken).ConfigureAwait(false);
         
