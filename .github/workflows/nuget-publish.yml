@@ -35,17 +35,17 @@ jobs:
       - name: Build project
         run: dotnet build ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj --configuration $CONFIGURATION --no-restore
 
-      - name: Set version number (SemVer-compliant)
+      - name: Set version number (timestamped)
         run: echo "VERSION=1.0.$(date +'%H%M%S')" >> $GITHUB_ENV
 
       - name: Pack NuGet package
         run: |
-          dotnet pack ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj \
+          dotnet pack ./WiSave.Shared.MassTransit/WiSave.Shared.MassTransit.csproj \
             --configuration $CONFIGURATION \
             --output ./nupkgs \
             --include-symbols --include-source \
             /p:PackageVersion=$VERSION
-          
+
       - name: Push to GitHub Packages
         run: |
           dotnet nuget push ./nupkgs/*.nupkg \
@@ -53,4 +53,3 @@ jobs:
             --api-key ${{ secrets.GH_PACKAGES_PAT }} \
             --skip-duplicate
           
-    
