@@ -40,7 +40,7 @@ jobs:
 
       - name: Pack NuGet package
         run: |
-          dotnet pack ./WiSave.Shared.MassTransit/WiSave.Shared.EventStore.csproj \
+          dotnet pack ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj \
             --configuration $CONFIGURATION \
             --output ./nupkgs \
             --include-symbols --include-source \
