@@ -36,7 +36,7 @@ jobs:
         run: dotnet build ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj --configuration $CONFIGURATION --no-restore
 
       - name: Set version number (SemVer-compliant)
-        run: echo "VERSION=1.0.0-$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        run: echo "VERSION=1.0.$(date +'%H%M%S')" >> $GITHUB_ENV
 
       - name: Pack NuGet package
         run: |
