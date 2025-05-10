@@ -9,11 +9,11 @@ using WiSave.Shared.OpenTelemetry.OpenTelemetry;
 
 namespace WiSave.Shared.EventStore.Marten.Subscriptions;
 
-public class MartenEventPublisher(
+public class MartenEventPublisher<TBus>(
     IServiceProvider serviceProvider,
     IActivityScope activityScope,
-    ILogger<MartenEventPublisher> logger
-): SubscriptionBase
+    ILogger<MartenEventPublisher<TBus>> logger
+) : SubscriptionBase where TBus : IBus
 {
     public override async Task<IChangeListener> ProcessEventsAsync(
         EventRange eventRange,
@@ -30,12 +30,12 @@ public class MartenEventPublisher(
                 var parentContext =
                     TelemetryPropagator.Extract(@event.Headers, ExtractTraceContextFromEventMetadata);
 
-                await activityScope.Run($"{nameof(MartenEventPublisher)}/{nameof(ProcessEventsAsync)}",
+                await activityScope.Run($"{nameof(MartenEventPublisher<TBus>)}/{nameof(ProcessEventsAsync)}",
                     async (_, ct) =>
                     {
                         using var scope = serviceProvider.CreateScope();
-                        var eventBus = scope.ServiceProvider.GetRequiredService<IBus>();
-                        
+                        var eventBus = scope.ServiceProvider.GetRequiredService<TBus>();
+
                         await eventBus.Publish(@event.Data, ct)
                             .ConfigureAwait(false);
                     },
