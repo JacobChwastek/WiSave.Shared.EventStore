@@ -1,4 +1,4 @@
-using Marten.Events.Daemon.Resiliency;
+using JasperFx.Events.Daemon;
 
 namespace WiSave.Shared.EventStore.Marten;
 

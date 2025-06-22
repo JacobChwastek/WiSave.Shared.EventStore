@@ -1,10 +1,10 @@
+using JasperFx;
 using Marten;
 using Marten.Services;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
-using Weasel.Core;
 using WiSave.Shared.EventStore.Configuration;
 using WiSave.Shared.EventStore.Marten.Subscriptions;
 
