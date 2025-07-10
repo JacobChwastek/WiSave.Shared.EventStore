@@ -31,8 +31,8 @@ jobs:
 
       - name: Set version number (GitHub run number)
         run: |
-          echo "VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
-          echo "New version: 1.0.${{ github.run_number }}"
+          echo "VERSION=1.1.${{ github.run_number }}" >> $GITHUB_ENV
+          echo "New version: 1.1.${{ github.run_number }}"
 
       - name: Restore dependencies
         run: dotnet restore ./WiSave.Shared.EventStore/WiSave.Shared.EventStore.csproj
